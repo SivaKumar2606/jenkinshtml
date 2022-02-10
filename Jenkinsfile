@@ -11,26 +11,26 @@ pipeline {
          }
          stage("Removing Existing Image & Container") {
             steps {
-                sh "docker -H tcp://10.1.1.5:2375 stop jk-mainweb || true"
-                sh "docker -H tcp://10.1.1.5:2375 rmi -f sivakumar2606/multibranchpipemain:v1 || true"
+                sh "docker -H tcp://10.1.1.5:2375 stop jk-masterweb || true"
+                sh "docker -H tcp://10.1.1.5:2375 rmi -f sivakumar2606/multibranchpipemaster:v1 || true"
             }
          }
          stage("Building New DockerImage") {
             steps {
                 sh "cd /var/lib/jenkins/workspace/multibranchpipe/"
-                sh "docker rmi -f sivakumar2606/multibranchpipemain:v1 || true"
+                sh "docker rmi -f sivakumar2606/multibranchpipemaster:v1 || true"
                 sh "sleep 3s"
-                sh "docker build -t sivakumar2606/multibranchpipemain:v1 ."
+                sh "docker build -t sivakumar2606/multibranchpipemaster:v1 ."
             }
          }
          stage("Pushing the New Image to hub Registry") {
             steps {
-               sh "docker push sivakumar2606/multibranchpipemain:v1"
+               sh "docker push sivakumar2606/multibranchpipemaster:v1"
             }
         }
          stage("Deploy Container in Remote Node") {
             steps {
-              sh "docker -H tcp://10.1.1.5:2375 run --rm -dit --name jk-mainweb --hostname jk-mainweb -p 9001:80 sivakumar2606/multibranchpipemain:v1"
+              sh "docker -H tcp://10.1.1.5:2375 run --rm -dit --name jk-masterweb --hostname jk-masterweb -p 9001:80 sivakumar2606/multibranchpipemaster:v1"
             }
         }
         stage("Check Reachability") {
