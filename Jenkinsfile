@@ -1,4 +1,3 @@
-// git rep: jenkinshtml Branch: dev
 
 pipeline {
     agent any
@@ -12,32 +11,32 @@ pipeline {
          }
          stage("Removing Existing Image & Container") {
             steps {
-                sh "docker -H tcp://10.1.1.5:2375 stop jk-devweb || true"
-                sh "docker -H tcp://10.1.1.5:2375 rmi -f sivakumar2606/multibranchpipedev:v1 || true"
+                sh "docker -H tcp://10.1.1.5:2375 stop jk-prodweb || true"
+                sh "docker -H tcp://10.1.1.5:2375 rmi -f sivakumar2606/multibranchpipeprod:v1 || true"
             }
          }
          stage("Building New DockerImage") {
             steps {
                 sh "cd /var/lib/jenkins/workspace/multibranchpipe/"
-                sh "docker rmi -f sivakumar2606/multibranchpipedev:v1 || true"
+                sh "docker rmi -f sivakumar2606/multibranchpipeprod:v1 || true"
                 sh "sleep 3s"
-                sh "docker build -t sivakumar2606/multibranchpipedev:v1 ."
+                sh "docker build -t sivakumar2606/multibranchpipeprod:v1 ."
             }
          }
          stage("Pushing the New Image to hub Registry") {
             steps {
-               sh "docker push sivakumar2606/multibranchpipedev:v1"
+               sh "docker push sivakumar2606/multibranchpipeprod:v1"
             }
         }
          stage("Deploy Container in Remote Node") {
             steps {
-              sh "docker -H tcp://10.1.1.5:2375 run --rm -dit --name jk-devweb --hostname jk-devweb -p 9002:80 sivakumar2606/multibranchpipedev:v1"
+              sh "docker -H tcp://10.1.1.5:2375 run --rm -dit --name jk-prodweb --hostname jk-prodweb -p 9003:80 sivakumar2606/multibranchpipeprod:v1"
             }
         }
         stage("Check Reachability") {
             steps {
               sh "sleep 5s"
-              sh "curl http://20.127.142.166:9002"
+              sh "curl http://20.127.142.166:9003"
             }
        }
     }
