@@ -11,8 +11,8 @@ pipeline {
          }
          stage("Removing Existing Image & Container") {
             steps {
-                sh "docker -H tcp://10.1.1.5:2375 stop jk-prodweb || true"
-                sh "docker -H tcp://10.1.1.5:2375 rmi -f sivakumar2606/multibranchpipeprod:v1 || true"
+                sh "docker -H tcp://10.1.1.5:2275 stop jk-prodweb || true"
+                sh "docker -H tcp://10.1.1.5:2275 rmi -f sivakumar2606/multibranchpipeprod:v1 || true"
             }
          }
          stage("Building New DockerImage") {
@@ -30,7 +30,7 @@ pipeline {
         }
          stage("Deploy Container in Remote Node") {
             steps {
-              sh "docker -H tcp://10.1.1.5:2375 run --rm -dit --name jk-prodweb --hostname jk-prodweb -p 9003:80 sivakumar2606/multibranchpipeprod:v1"
+              sh "docker -H tcp://10.1.1.5:2275 run --rm -dit --name jk-prodweb --hostname jk-prodweb -p 9003:80 sivakumar2606/multibranchpipeprod:v1"
             }
         }
         stage("Check Reachability") {
