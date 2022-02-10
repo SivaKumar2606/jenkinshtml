@@ -39,6 +39,15 @@ pipeline {
               sh "curl http://20.127.142.166:9003"
             }
        }
+        stage("cat README.md") {
+            when {
+              branch "pr*"
+            }                
+            steps {
+              sh "cat README.md"
+           }
+       } 
+                 
     }
 }
 
