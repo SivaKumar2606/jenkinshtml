@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sh "rm -rf jenkinshtml || true"
                 sh "git clone https://github.com/SivaKumar2606/jenkinshtml.git"
-                sh "cp /var/lib/jenkins/workspace/multibranchpipe/jenkinshtml/* /var/lib/jenkins/workspace/multibranchpipe/"
+                //sh "cp /var/lib/jenkins/workspace/multibranchpipe/jenkinshtml/* /var/lib/jenkins/workspace/multibranchpipe/"
             }
          }
          stage("Removing Existing Image & Container") {
@@ -17,7 +17,7 @@ pipeline {
          }
          stage("Building New DockerImage") {
             steps {
-                sh "cd /var/lib/jenkins/workspace/multibranchpipe/"
+                //sh "cd /var/lib/jenkins/workspace/multibranchpipe/"
                 sh "docker rmi -f sivakumar2606/multibranchpipeprod:v1 || true"
                 sh "sleep 3s"
                 sh "docker build -t sivakumar2606/multibranchpipeprod:v1 ."
